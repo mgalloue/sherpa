@@ -1,0 +1,11 @@
+apiVersion: promoter.argoproj.io/v1alpha1
+kind: ArgoCDCommitStatus
+metadata:
+  name: inventory-api-health
+  namespace: promoter-system
+spec:
+  promotionStrategyRef:
+    name: inventory-api
+  applicationSelector:
+    matchLabels:
+      app-name: inventory-api

@@ -1,0 +1,45 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: inventory-api
+  namespace: argocd
+spec:
+  generators:
+  - list:
+      elements:
+      - stage: dev
+        cluster: fuji-dev
+      - stage: test
+        cluster: fuji-test
+  template:
+    metadata:
+      name: inventory-api-{{stage}}
+      labels:
+        app-name: inventory-api
+        env: '{{stage}}'
+    spec:
+      project: default
+      destination:
+        name: '{{cluster}}'
+        namespace: inventory-api
+      sourceHydrator:
+        drySource:
+          repoURL: https://github.com/ansys-internal/fuji-factory
+          path: projects/inventory-api/app/chart
+          targetRevision: HEAD
+          helm:
+            valueFiles:
+            - ./values.yaml
+            - ../stages/{{stage}}/values.yaml
+        hydrateTo:
+          targetBranch: stages/inventory-api-{{stage}}-next
+        syncSource:
+          targetBranch: stages/inventory-api-{{stage}}
+          path: inventory-api
+      syncPolicy:
+        automated:
+          prune: true
+          allowEmpty: true
+          selfHeal: true
+        syncOptions:
+        - CreateNamespace=false
