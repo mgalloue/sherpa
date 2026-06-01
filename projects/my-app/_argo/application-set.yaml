@@ -1,0 +1,45 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: my-app
+  namespace: argocd
+spec:
+  generators:
+  - list:
+      elements:
+      - stage: dev
+        cluster: fuji-dev
+      - stage: test
+        cluster: fuji-test
+  template:
+    metadata:
+      name: my-app-{{stage}}
+      labels:
+        app-name: my-app
+        env: '{{stage}}'
+    spec:
+      project: default
+      destination:
+        name: '{{cluster}}'
+        namespace: my-app
+      sourceHydrator:
+        drySource:
+          repoURL: https://github.com/ansys-internal/fuji-factory
+          path: projects/my-app/app/chart
+          targetRevision: HEAD
+          helm:
+            valueFiles:
+            - ./values.yaml
+            - ../stages/{{stage}}/values.yaml
+        hydrateTo:
+          targetBranch: stages/my-app-{{stage}}-next
+        syncSource:
+          targetBranch: stages/my-app-{{stage}}
+          path: my-app
+      syncPolicy:
+        automated:
+          prune: true
+          allowEmpty: true
+          selfHeal: true
+        syncOptions:
+        - CreateNamespace=false

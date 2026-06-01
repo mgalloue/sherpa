@@ -1,0 +1,8 @@
+name: my-app
+owner: mathilde.gallouet@ansys.com
+members: []
+environments:
+- name: dev
+  gates: []
+- name: test
+  gates: []
