@@ -1,1 +1,0 @@
-../../../../../init/stages/dev/global_var.tf
