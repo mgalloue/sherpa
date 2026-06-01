@@ -1,0 +1,14 @@
+name: my-app
+owner: mathilde.gallouet@ansys.com
+members: []
+environments:
+- name: dev
+  gates: []
+- name: test
+  gates: []
+layer:
+  namespace: my-app
+  project_route: true
+  subdomains: []
+  ca_bundle_name: ansys-bundle
+  enable_idp_token_exchange: false
