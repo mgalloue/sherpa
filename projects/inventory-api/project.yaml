@@ -1,0 +1,23 @@
+name: inventory-api
+owner: mgalloue@synopsys.com
+members:
+- id: bob@synopsys.com
+  role: developer
+  environments: []
+- id: qa@synopsys.com
+  role: approver
+  environments:
+  - test
+environments:
+- name: dev
+  gates: []
+- name: test
+  gates:
+  - manual_approval
+layer:
+  namespace: inventory
+  project_route: true
+  subdomains:
+  - inventory-admin
+  ca_bundle_name: ansys-bundle
+  enable_idp_token_exchange: false

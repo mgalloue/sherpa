@@ -1,0 +1,15 @@
+apiVersion: promoter.argoproj.io/v1alpha1
+kind: PromotionStrategy
+metadata:
+  name: inventory-api
+  namespace: promoter-system
+spec:
+  activeCommitStatuses:
+  - key: argocd-health
+  environments:
+  - autoMerge: true
+    branch: stages/inventory-api-dev
+  - autoMerge: false
+    branch: stages/inventory-api-test
+  gitRepositoryRef:
+    name: fuji-factory
